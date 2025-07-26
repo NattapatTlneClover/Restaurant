@@ -1,15 +1,15 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../config/database');
 
-const Table = sequelize.define('table', {
-  tableId: {
+const Table = sequelize.define('Table', {
+  id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
     allowNull: false,
     primaryKey: true
   },
   numberTable: {
-    type: Sequelize.STRING,  
+    type: Sequelize.STRING,
     allowNull: false
   },
   chairQuantity: {
@@ -22,10 +22,11 @@ const Table = sequelize.define('table', {
   },
   reservedAt: {
     type: Sequelize.DATE,
-    allowNull: true // ยังไม่จองก็ว่างไว้ได้
+    allowNull: true
   }
 }, {
-  timestamps: true
+  tableName: 'tables',
+  timestamps: false
 });
 
 module.exports = Table;
