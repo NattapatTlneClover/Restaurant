@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const sequelize = require('../config/database'); 
+const sequelize = require('../config/database');
 
 const User = sequelize.define('user', {
   id: {
@@ -8,8 +8,35 @@ const User = sequelize.define('user', {
     allowNull: false,
     primaryKey: true
   },
-  name: Sequelize.STRING,
-  email: Sequelize.STRING
+  username: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  password: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  full_name: {
+    type: Sequelize.STRING,
+  },
+  employee_code: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  role: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    defaultValue: 'admin',
+  },
+  created_at: {
+    type: Sequelize.DATE,
+    allowNull: false,
+  },
+}, {
+  tableName: 'admins',
+  timestamps: false,
 });
 
 module.exports = User;
