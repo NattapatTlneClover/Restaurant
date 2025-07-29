@@ -20,7 +20,7 @@ exports.createNewMenuItem = async (req, res, next) => {
             return res.status(400).json({ errors: errors.array() });
         }
 
-        const { name, description, price, category, isAvailable } = req.body;
+        const { name, description, price, category, isAvailable,isSignature } = req.body;
 
         const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
 
@@ -30,7 +30,8 @@ exports.createNewMenuItem = async (req, res, next) => {
             price,
             category,
             imageUrl,
-            isAvailable
+            isAvailable,
+            isSignature
         });
         res.status(201).json(menuItem);
     } catch (err) {
@@ -43,7 +44,7 @@ exports.createNewMenuItem = async (req, res, next) => {
 exports.updateMenuitem = async (req, res, next) => {
     try {
         const menuItemId = req.params.id;
-        const { name, description, price, category, isAvailable } = req.body;
+        const { name, description, price, category, isAvailable,isSignature } = req.body;
         const imageFile = req.file;
 
         const menuItem = await MenuItem.findByPk(menuItemId);
@@ -56,6 +57,7 @@ exports.updateMenuitem = async (req, res, next) => {
         menuItem.price = price || menuItem.price;
         menuItem.category = category || menuItem.category;
         menuItem.isAvailable = isAvailable !== undefined ? isAvailable : menuItem.isAvailable;
+        menuItem.isSignatures = isSignature || menuItem.isSignature;
 
         if (imageFile) {
             menuItem.imageUrl = `/uploads/${imageFile.filename}`;

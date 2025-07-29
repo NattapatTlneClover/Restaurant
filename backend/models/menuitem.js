@@ -24,6 +24,11 @@ const MenuItem = sequelize.define('menuItem', {
     type: Sequelize.STRING,
     allowNull: false
   },
+  isSignature: {
+    type: Sequelize.BOOLEAN,
+    allowNull: false,
+    defaultValue: false
+  },
   imageUrl: {
     type: Sequelize.STRING,
     allowNull: true
