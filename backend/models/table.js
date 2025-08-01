@@ -20,6 +20,14 @@ const Table = sequelize.define('Table', {
     type: Sequelize.BOOLEAN,
     defaultValue: false
   },
+  imageUrl: {
+    type: Sequelize.STRING,
+    allowNull: true
+  },
+  credentialCode: {
+    type: Sequelize.STRING,
+    allowNull: true
+  },
   reservedAt: {
     type: Sequelize.DATE,
     allowNull: true

@@ -11,7 +11,6 @@ const User = sequelize.define('user', {
   username: {
     type: Sequelize.STRING,
     allowNull: false,
-    unique: true,
   },
   password: {
     type: Sequelize.STRING,
@@ -33,9 +32,10 @@ const User = sequelize.define('user', {
   created_at: {
     type: Sequelize.DATE,
     allowNull: false,
+    defaultValue: Sequelize.NOW,
   },
 }, {
-  tableName: 'admins',
+  tableName: 'users',
   timestamps: false,
 });
 
