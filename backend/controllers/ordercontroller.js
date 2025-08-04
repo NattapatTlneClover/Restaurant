@@ -2,6 +2,7 @@ const sequelize = require('../config/database');
 const Order = require('../models/orders');
 const OrderItem = require('../models/order_item');
 const MenuItem = require('../models/menuitem');
+const OrderGroup = require('../models/order_group');
 
 
 exports.createOrder = async (req, res, next) => {
@@ -17,8 +18,10 @@ exports.createOrder = async (req, res, next) => {
   }
 
   tableId = Number(tableId);
-  if (isNaN(tableId)) {
-    return res.status(400).json({ error: 'tableId must be a number' });
+  if (isNaN(tableId)) return res.status(400).json({ error: 'tableId must be a number' });
+
+  if (!Array.isArray(items) || items.length === 0) {
+    return res.status(400).json({ error: 'items must be a non-empty array' });
   }
 
   const t = await sequelize.transaction();
@@ -27,8 +30,27 @@ exports.createOrder = async (req, res, next) => {
     let totalPrice = 0;
     const orderItemsData = [];
 
+    // หาหรือสร้าง order_group active ของโต๊ะนี้
+    let orderGroup = await OrderGroup.findOne({
+      where: { table_id: tableId, status: 'active' },
+      transaction: t,
+    });
+
+    if (!orderGroup) {
+      orderGroup = await OrderGroup.create(
+        { table_id: tableId, status: 'active' },
+        { transaction: t }
+      );
+    }
+
+    // วนตรวจสอบ items พร้อมคำนวณราคา
     for (const item of items) {
-      const menuItem = await MenuItem.findByPk(item.menuItemId);
+      if (!item.menuItemId || !item.quantity) {
+        await t.rollback();
+        return res.status(400).json({ error: 'Invalid item in items array' });
+      }
+
+      const menuItem = await MenuItem.findByPk(item.menuItemId, { transaction: t });
       if (!menuItem) {
         await t.rollback();
         return res.status(404).json({ error: `MenuItem ID ${item.menuItemId} not found` });
@@ -37,7 +59,7 @@ exports.createOrder = async (req, res, next) => {
       totalPrice += menuItem.price * item.quantity;
 
       orderItemsData.push({
-        menu_item_id: menuItem.id,  // ใช้ชื่อฟิลด์ตาม model นะ
+        menu_item_id: menuItem.id,
         quantity: item.quantity,
         price: menuItem.price,
       });
@@ -48,11 +70,18 @@ exports.createOrder = async (req, res, next) => {
       return res.status(400).json({ error: 'Total price must be greater than zero' });
     }
 
+    // สร้าง order โดยผูกกับ orderGroup
     const order = await Order.create(
-      { table_id: tableId, total_price: totalPrice, status: 'pending' },
+      {
+        table_id: tableId,
+        order_group_id: orderGroup.id,
+        total_price: totalPrice,
+        status: 'pending',
+      },
       { transaction: t }
     );
 
+    // สร้าง order_items
     await Promise.all(
       orderItemsData.map(itemData =>
         OrderItem.create({ ...itemData, order_id: order.id }, { transaction: t })
@@ -61,9 +90,13 @@ exports.createOrder = async (req, res, next) => {
 
     await t.commit();
 
-    // ดึงข้อมูลหลัง commit ออกมา query อีกที (ไม่อยู่ใน transaction)
     const result = await Order.findByPk(order.id, {
-      include: [OrderItem],
+      include: [
+        {
+          model: OrderItem,
+          include: [MenuItem],
+        },
+      ],
     });
 
     res.status(201).json(result);
@@ -99,6 +132,45 @@ exports.getOrderById = async (req, res, next) => {
     res.json(order);
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+};
+
+exports.getOrdersByGroup = async (req, res) => {
+  try {
+    const { orderGroupId } = req.params;
+
+    if (!orderGroupId) {
+      return res.status(400).json({ message: 'Missing orderGroupId' });
+    }
+
+    // ตรวจสอบว่า order group ยัง active อยู่ไหม
+    const orderGroup = await OrderGroup.findOne({
+      where: { id: orderGroupId, status: 'active' },
+    });
+
+    if (!orderGroup) {
+      return res.status(404).json({ message: 'Order group not found or closed' });
+    }
+
+    // ดึง orders ทั้งหมดของ order group พร้อม order items และ menu item
+    const orders = await Order.findAll({
+      where: { order_group_id: orderGroupId },
+      include: [
+        {
+          model: OrderItem,
+          include: [
+            {
+              model: MenuItem,
+            },
+          ],
+        },
+      ],
+    });
+
+    return res.json(orders);
+  } catch (error) {
+    console.error('Error fetching orders by group:', error);
+    return res.status(500).json({ message: 'Failed to get orders' });
   }
 };
 

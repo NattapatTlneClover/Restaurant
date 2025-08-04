@@ -15,6 +15,7 @@ const Orders = require('./models/orders');
 const OrderItems = require('./models/order_item');
 const Reservation = require('./models/reservations');
 const RefreshToken = require('./models/refreshtoken');
+const OrderGroup = require('./models/order_group');
 
 //Routes
 const tableRoutes = require('./routes/tableroutes');

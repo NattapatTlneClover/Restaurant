@@ -4,7 +4,9 @@ const orderController = require('../controllers/ordercontroller');
 const upload = require('../middleware/multer');
 
 router.post('/', upload.none(), orderController.createOrder);
+router.get('/group/:orderGroupId', orderController.getOrdersByGroup);
 router.get('/:id', orderController.getOrderById);
 router.get('/', orderController.getAllOrders);
+
 
 module.exports = router;

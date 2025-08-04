@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../config/database');
-
+const OrderGroup = require('./order_group');
 const Table = require('./table');
 
 const Order = sequelize.define('Order', {
@@ -18,6 +18,16 @@ const Order = sequelize.define('Order', {
       key: 'id',
     },
     onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  },
+  order_group_id: {
+    type: Sequelize.INTEGER,
+    allowNull: true,
+    references: {
+      model: OrderGroup,
+      key: 'id',
+    },
+    onDelete: 'SET NULL',
     onUpdate: 'CASCADE',
   },
   total_price: {
