@@ -1,0 +1,22 @@
+<div
+  class="bg-white border border-gray-100 transition transform duration-700 hover:shadow-xl hover:scale-105 p-4 rounded-lg relative">
+  <span class="bg-red-100 border border-red-500 rounded-full text-primary text-sm poppins px-4 py-1 inline-block mb-4">
+    {{ table.numberTable}}
+  </span>
+  <img class="w-64 mx-auto transform transition duration-300 hover:scale-105"
+    [src]="'http://localhost:8080'+ table.imageUrl" alt="{{ table.numberTable }}" />
+  <div class="flex flex-col items-center my-3 space-y-2">
+    <h1 class="text-gray-900 poppins text-lg">{{ table.numberTable }}</h1>
+    <p class="text-gray-500 poppins text-sm text-center">
+      {{ table.credentialCode ? table.credentialCode.slice(0, 50) : 'No Credential Code' }}
+    </p>
+    <h2 class="text-gray-900 poppins text-2xl font-bold">{{ table.chairQuantity }} chair</h2>
+    <!-- <a href="order" class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-full transition">
+      Reserved
+    </a> -->
+    <button class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-full transition" 
+    (click)="toggleReserve()">
+  {{ table.isReserved ? 'Cancel Reserve' : 'Reserve' }}
+    </button>
+  </div>
+</div>

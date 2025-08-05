@@ -1,0 +1,42 @@
+<!-- navbar -->
+<app-navbar></app-navbar>
+<router-outlet></router-outlet>
+
+<!-- Header -->
+<section class="header-banner h-96 w-full bg-yellow-50">
+  <div class="flex flex-col items-center justify-center h-full">
+    <h1 class="text-center text-3xl md:text-4xl lg:text-5xl poppins font-semibold text-white">
+      Never miss a moment of your order journey
+    </h1>
+  </div>
+</section>
+
+<!-- body -->
+<div class="p-6 bg-white rounded shadow-md max-w-7xl mx-auto">
+  <div *ngIf="orders?.length; else noOrder" class="order-summary-container">
+    <div class="order-summary-card" *ngFor="let item of orders; let i = index">
+      <div class="item-name">{{ item.name }}</div>
+      <div class="item-price">{{ item.price | currency:'THB':'symbol':'1.2-2' }}</div>
+      <div class="item-qty">x{{ item.quantity }}</div>
+      <div class="item-total">{{ (item.price * item.quantity) | currency:'THB':'symbol':'1.2-2' }}</div>
+      <button (click)="deleteItem(item.menuItemId)" class="btn-delete">
+        Delete
+      </button>
+    </div>
+    <div class="order-summary-container btn-wrapper">
+      <button (click)="placeOrder()" class="btn-place-order">
+        Place Order
+      </button>
+    </div>
+  </div>
+  <ng-template #noOrder>
+    <p class="text-center text-gray-500 my-6">No orders found.</p>
+  </ng-template>
+</div>
+
+<!-- footer -->
+<footer class="bg-gray-800 px-6 py-12">
+  <div class=" max-w-screen-xl mx-auto px-6">
+    <app-footer></app-footer>
+  </div>
+</footer>

@@ -1,0 +1,16 @@
+<main class="h-screen w-full banner">
+    <div class="flex flex-col justify-center items-center h-screen">
+        <!-- Brand -->
+        <img src="assets/icons/restaurant.png" alt="brand" class="w-20 mb-4" />
+        <form [formGroup]="form" class="bg-white w-96 mt-6 p-4 rounded-lg shadow-lg" (ngSubmit)="onSubmit()">
+            <div class="flex flex-col space-y-6">
+                <input id="credentialCode" type="text" name="credentialCode" placeholder="Credential Code"
+                    class="border px-4 py-2 rounded" formControlName="credentialCode" required />
+            </div>
+            <button type="submit" class="bg-red-500 w-full text-white mt-6 py-2 rounded hover:bg-red-600 transition">
+                Sign In
+            </button>
+        </form>
+    </div>
+
+</main>

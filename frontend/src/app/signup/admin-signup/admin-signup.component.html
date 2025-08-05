@@ -1,0 +1,70 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <h2>Register</h2>
+    <p>We just need a little bit of data from you to get you started 🚀</p>
+
+    <div class="control">
+        <label for="username">Username</label>
+        <input id="username" type="username" name="username" formControlName="username" />
+    </div>
+
+    <div class="control-row" formGroupName="passwords">
+        <div class="control">
+            <label for="password">Password</label>
+            <input id="password" type="password" name="password" formControlName="password" />
+        </div>
+
+        <div class="control">
+            <label for="confirm-password">Confirm Password</label>
+            <input id="confirm-password" type="password" name="confirm-password" formControlName="confirmPassword" />
+        </div>
+    </div>
+
+    <hr />
+
+    <div>
+        <div class="control-row">
+            <div class="control">
+                <label for="first-name">First Name</label>
+                <input type="text" id="first-name" name="first-name" formControlName="firstName" />
+            </div>
+
+            <div class="control">
+                <label for="last-name">Last Name</label>
+                <input type="text" id="last-name" name="last-name" formControlName="lastName" />
+            </div>
+        </div>
+
+    </div>
+
+    <hr />
+
+    <div class="control-row">
+        <div class="control">
+            <label for="role">What best describes your role?</label>
+            <select id="role" name="role" formControlName="role">
+                <option value="admin">admin</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="control-row">
+        <div class="control">
+            <label for="terms-and-conditions">
+                <input type="checkbox" id="terms-and-conditions" name="terms" formControlName="agree" />
+                I agree to the terms and conditions
+            </label>
+        </div>
+    </div>
+
+    <p class="form-actions">
+        <button type="button" class="button button-flat" (click)="onReset()">Reset</button>
+        <button type="submit" class="button">Sign up</button>
+    </p>
+
+    @if (form.touched && form.invalid) {
+    <p class="control-error">
+        Invalid form - please check your input data.
+    </p>
+    }
+</form>

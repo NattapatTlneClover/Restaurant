@@ -1,0 +1,13 @@
+.header-banner {
+  background-image: url('../../../assets/images/bannerbackground.png');
+  height: 600px !important;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+.banner {
+  background-image: url('../../../assets/images/bannerbackground.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}

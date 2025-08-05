@@ -1,0 +1,20 @@
+<div class="bg-white transform transition duration-700 hover:scale-105 p-6 rounded-2xl hover:shadow-xl">
+  <!-- image -->
+  <div class="overflow-hidden rounded-2xl flex flex-grow">
+    <img class="transform transition duration-700 hover:scale-125" [src]="'http://localhost:8080'+ food.imageUrl" alt="{{ food.name }}" />
+  </div>
+
+  <!-- other info -->
+  <div class="flex mt-6 space-x-3">
+    <!-- icon -->
+    <!-- <div>
+      <img [src]="food.icon" alt="{{ food.name }}" class="w-36" />
+    </div> -->
+
+    <!-- description -->
+    <div class="flex flex-col space-y-3">
+      <h1 class="text-xl text-gray-800 poppins">{{ food.name }}</h1>
+      <p class="text-sm text-gray-500 poppins">{{ food.description ? food.description.slice(0, 50) : 'No Description' }}</p>
+    </div>
+  </div>
+</div>

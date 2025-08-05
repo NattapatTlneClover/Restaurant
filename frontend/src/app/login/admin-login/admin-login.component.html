@@ -1,0 +1,26 @@
+<main class="h-screen w-full banner">
+  <div class="flex flex-col justify-center items-center h-screen">
+    <!-- Brand -->
+    <img src="assets/icons/restaurant.png" alt="brand" class="w-20 mb-4" />
+
+    <!-- Sign In Form -->
+    <form [formGroup]="form" class="bg-white w-96 mt-6 p-4 rounded-lg shadow-lg" (ngSubmit)="onSubmit()">
+      <div class="flex flex-col space-y-6">
+        <input id="username" type="text" name="username" placeholder="username" class="border px-4 py-2 rounded"
+          formControlName="username" required />
+        <input type="password" name="password" placeholder="Password" class="border px-4 py-2 rounded"
+          formControlName="password" />
+      </div>
+      <button type="submit" class="bg-red-500 w-full text-white mt-6 py-2 rounded hover:bg-red-600 transition">
+        Sign In
+      </button>
+      <a [routerLink]="['/register-admin']" class="block text-base text-primary text-center my-6 hover:underline">Need
+        an account?</a>
+
+      @if(passwordIsInvalid) {
+      <p class="control-error">Please enter a valid password (must be at least 6 characters long and contain a question
+        mark).</p>
+      }
+    </form>
+  </div>
+</main>

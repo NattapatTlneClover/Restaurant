@@ -1,0 +1,50 @@
+<header [ngClass]="{
+  'bg-white shadow-md': changeHeader,
+  'bg-transparent': !changeHeader
+}" class="fixed z-50 top-0 left-0 w-full transition duration-500">
+  <nav class="flex items-center max-w-screen-xl mx-auto px-6 py-3">
+    <!-- left -->
+    <div class="flex flex-grow">
+      <img class="w-36 cursor-pointer rounded-none border-none" src="assets/icons/restaurant.png	" alt="restaurant"
+        style="width:100px; height:auto;">
+    </div>
+
+    <!-- right -->
+    <div class="flex items-center justify-end space-x-6">
+      <button (click)="handleMenuTabs('home')"
+        class="px-6 py-3 poppins rounded-full focus:outline-none transform transition duration-700 hover:scale-105"
+        [class.bg-red-500]="router.url.includes('/home')" [class.text-white]="router.url.includes('/home')"
+        [class.bg-gray-300]="!router.url.includes('/home')" [class.text-black]="!router.url.includes('/home')">
+        Home
+      </button>
+
+      <button (click)="handleMenuTabs('menu')"
+        class="px-6 py-3 poppins rounded-full focus:outline-none transform transition duration-700 hover:scale-105"
+        [class.bg-red-500]="router.url.includes('/menu')" [class.text-white]="router.url.includes('/menu')"
+        [class.bg-gray-300]="!router.url.includes('/menu')" [class.text-black]="!router.url.includes('/menu')">
+        Menu
+      </button>
+
+      <button (click)="handleMenuTabs('orders')"
+        class="px-6 py-3 poppins rounded-full focus:outline-none transform transition duration-700 hover:scale-105"
+        [class.bg-red-500]="router.url.includes('/orders')" [class.text-white]="router.url.includes('/orders')"
+        [class.bg-gray-300]="!router.url.includes('/orders')" [class.text-black]="!router.url.includes('/orders')">
+        Order
+      </button>
+
+      <button (click)="handleMenuTabs('amplihier')"
+        class="px-6 py-3 poppins rounded-full focus:outline-none transform transition duration-700 hover:scale-105"
+        [class.bg-red-500]="router.url.includes('/amplihier')" [class.text-white]="router.url.includes('/amplihier')"
+        [class.bg-gray-300]="!router.url.includes('/amplihier')" [class.text-black]="!router.url.includes('/amplihier')">
+        Order Status
+      </button>
+
+      <button (click)="handleMenuTabs('payment')"
+        class="px-6 py-3 poppins rounded-full focus:outline-none transform transition duration-700 hover:scale-105"
+        [class.bg-red-500]="router.url.includes('/payment')" [class.text-white]="router.url.includes('/payment')"
+        [class.bg-gray-300]="!router.url.includes('/payment')" [class.text-black]="!router.url.includes('/payment')">
+        Payment
+      </button>
+    </div>
+  </nav>
+</header>

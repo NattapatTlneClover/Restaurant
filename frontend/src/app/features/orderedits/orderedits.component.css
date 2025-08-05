@@ -1,0 +1,34 @@
+.header-banner {
+  background-image: url('../../../assets/images/bannerbackground.png');
+  height: 600px !important;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+.banner {
+  background-image: url('../../../assets/images/bannerbackground.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  color: white;
+  text-transform: capitalize;
+}
+
+.status-pending {
+  background-color: #eab308; 
+}
+.status-cooking {
+  background-color: #f97316; 
+}
+.status-served {
+  background-color: #22c55e; 
+}
+.status-cancelled {
+  background-color: #ef4444; 
+}
