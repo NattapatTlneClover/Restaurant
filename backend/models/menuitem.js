@@ -37,6 +37,8 @@ const MenuItem = sequelize.define('menuItem', {
     type: Sequelize.BOOLEAN,
     defaultValue: true
   }
+}, {
+  timestamps: true,  // <-- ใส่ที่นี่ใน options object
 });
 
 module.exports = MenuItem;

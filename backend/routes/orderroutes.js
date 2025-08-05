@@ -7,6 +7,7 @@ router.post('/', upload.none(), orderController.createOrder);
 router.get('/group/:orderGroupId', orderController.getOrdersByGroup);
 router.get('/:id', orderController.getOrderById);
 router.get('/', orderController.getAllOrders);
+router.put('/:id', upload.none(), orderController.updateOrderStatus);
 
 
 module.exports = router;

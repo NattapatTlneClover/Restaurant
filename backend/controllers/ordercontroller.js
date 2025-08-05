@@ -3,6 +3,8 @@ const Order = require('../models/orders');
 const OrderItem = require('../models/order_item');
 const MenuItem = require('../models/menuitem');
 const OrderGroup = require('../models/order_group');
+const { getIO } = require('../config/socket');
+
 
 
 exports.createOrder = async (req, res, next) => {
@@ -99,6 +101,9 @@ exports.createOrder = async (req, res, next) => {
       ],
     });
 
+    const io = getIO();
+    io.emit('orderCreated', result);
+
     res.status(201).json(result);
   } catch (err) {
     try {
@@ -114,7 +119,12 @@ exports.createOrder = async (req, res, next) => {
 // Get all orders
 exports.getAllOrders = async (req, res, next) => {
   try {
-    const orders = await Order.findAll({ include: [OrderItem] });
+    const orders = await Order.findAll({
+      include: [{
+        model: OrderItem,
+        include: [MenuItem]   // ดึงข้อมูล menu item ในแต่ละ orderItem ด้วย
+      }]
+    });
     res.json(orders);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -171,6 +181,43 @@ exports.getOrdersByGroup = async (req, res) => {
   } catch (error) {
     console.error('Error fetching orders by group:', error);
     return res.status(500).json({ message: 'Failed to get orders' });
+  }
+};
+
+exports.updateOrderStatus = async (req, res) => {
+  const id = req.params.id;
+  const { status } = req.body;
+
+  console.log('Update order id:', id);
+  console.log('Status from body:', status);
+
+  if (!status) {
+    return res.status(400).json({ message: 'Status is required' });
+  }
+
+  try {
+    const order = await Order.findByPk(id);
+    if (!order) return res.status(404).json({ message: 'Order not found' });
+
+    order.status = status;
+    await order.save();
+
+    const updatedOrder = await Order.findByPk(id, {
+      include: [
+        {
+          model: OrderItem,
+          include: [MenuItem]
+        }
+      ]
+    });
+
+    const io = getIO();
+    io.emit('orderUpdated', updatedOrder); // ส่ง event แจ้ง client ทุกคน
+    console.log('Emitting orderUpdated event for order id:', id);
+    res.json({ message: 'Status updated successfully', order: updatedOrder });
+  } catch (err) {
+    console.error('Error in updateOrderStatus:', err);
+    res.status(500).json({ error: err.message });
   }
 };
 

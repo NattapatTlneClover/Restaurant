@@ -35,7 +35,7 @@ const Order = sequelize.define('Order', {
     allowNull: false,
   },
   status: {
-    type: Sequelize.ENUM('pending', 'confirmed', 'canceled', 'completed'),
+    type: Sequelize.ENUM('pending', 'cooking', 'served', 'cancelled'),
     defaultValue: 'pending',
   },
   created_at: {

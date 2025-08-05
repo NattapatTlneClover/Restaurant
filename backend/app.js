@@ -1,7 +1,8 @@
 //Necessaries
 require('dotenv').config();
 const express = require('express');
-const app = express();
+const http = require('http');
+const { Server } = require('socket.io');
 const sequelize = require('./config/database');
 const Sequelize = require('sequelize');
 const path = require('path');
@@ -23,6 +24,12 @@ const menuItemRoutes = require('./routes/menuitemroutes');
 const orderRoutes = require('./routes/orderroutes');
 const reservationRoutes = require('./routes/reservationroute');
 const useradminRoutes = require('./routes/userroutes');
+
+//WebSocket
+const { init } = require('./config/socket');
+const app = express();
+const server = http.createServer(app);
+const io = init(server);
 
 //Setup
 app.use(cors()); // Set up for front End with difference ports
@@ -82,4 +89,4 @@ sequelize
   .catch(err => { console.log(err) });
 
 //export
-module.exports = app;
+module.exports = {app,server,io};
