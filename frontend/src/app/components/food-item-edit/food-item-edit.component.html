@@ -1,0 +1,82 @@
+<div
+    class="bg-white border border-gray-100 transition transform duration-700 hover:shadow-xl hover:scale-105 p-4 rounded-lg relative">
+    <span
+        class="bg-red-100 border border-red-500 rounded-full text-primary text-sm poppins px-4 py-1 inline-block mb-4">
+        {{ food.category }}
+    </span>
+    <img [src]="'http://localhost:8080' + food.imageUrl + '?v=' + food.updatedAt" alt="{{ food.name }}"
+        (load)="onLoaded($event)" class="w-64 mx-auto transform transition duration-300 hover:scale-105" />
+    <div class="flex flex-col items-center my-3 space-y-2">
+        <h1 class="text-gray-900 poppins text-lg">{{ food.name }}</h1>
+        <p class="text-gray-500 poppins text-sm text-center">
+            {{ food.description ? food.description.slice(0, 50) : 'No Description' }}
+        </p>
+        <h2 class="text-gray-900 poppins text-2xl font-bold">{{ food.price }} บาท</h2>
+        <button (click)="openPopup()"
+            class="bg-red-600 hover:bg-red-600 text-white px-6 py-3 rounded-full transition mt-2">
+            Edit Menu
+        </button>
+
+        <!-- Modal -->
+        <div *ngIf="isOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+            <div class="bg-white rounded-2xl w-[420px] p-6 space-y-4 shadow-xl">
+                <h2 class="text-xl font-semibold text-gray-800">Edit Menu</h2>
+
+                <div class="space-y-1">
+                    <label class="text-sm text-gray-600">Name</label>
+                    <input class="border border-gray-300 rounded-lg w-full p-2 focus:outline-none focus:border-gray-500"
+                        [(ngModel)]="editName" />
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-sm text-gray-600">Price (บาท)</label>
+                    <input type="number"
+                        class="border border-gray-300 rounded-lg w-full p-2 focus:outline-none focus:border-gray-500"
+                        [(ngModel)]="editPrice" />
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-sm text-gray-600">Category</label>
+                    <select
+                        class="border border-gray-300 rounded-lg w-full p-2 focus:outline-none focus:border-gray-500"
+                        [(ngModel)]="editCategory">
+                        <option value="food">Food</option>
+                        <option value="drink">Drink</option>
+                        <option value="dessert">Dessert</option>
+                    </select>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-sm text-gray-600">Description</label>
+                    <textarea rows="3"
+                        class="border border-gray-300 rounded-lg w-full p-2 focus:outline-none focus:border-gray-500"
+                        [(ngModel)]="editDescription"></textarea>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <label class="flex items-center gap-2 text-sm text-gray-600">
+                        <input type="checkbox" [(ngModel)]="editIsAvailable" /> Available
+                    </label>
+                    <label class="flex items-center gap-2 text-sm text-gray-600">
+                        <input type="checkbox" [(ngModel)]="editIsSignature" /> Signature
+                    </label>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-sm text-gray-600">Change Image</label>
+                    <input type="file" (change)="onFileSelected($event)" />
+                </div>
+
+                <div class="flex justify-end gap-3 pt-3">
+                    <button (click)="closePopup()" class="px-4 py-2 border rounded-lg text-gray-600 hover:bg-gray-100">
+                        Cancel
+                    </button>
+                    <button (click)="saveEdit()"
+                        class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

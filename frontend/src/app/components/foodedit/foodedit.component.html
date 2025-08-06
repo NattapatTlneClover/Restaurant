@@ -1,0 +1,38 @@
+<section class="my-12 max-w-screen-xl mx-auto px-6">
+
+    <div class="flex items-center justify-center space-x-4 mt-6">
+        <button
+            class="text-sm py-3 px-6 rounded-full text-white poppins ring-red-300 focus:ring-4 transition duration-300 transform hover:scale-105"
+            [ngClass]="{ 'bg-red-500': menuTab === 'food', 'bg-gray-300 text-black': menuTab !== 'food' }"
+            (click)="handleMenuTabs('food')">
+            Food
+        </button>
+
+        <button
+            class="text-sm py-3 px-6 rounded-full text-white poppins ring-red-300 focus:ring-4 transition duration-300 transform hover:scale-105"
+            [ngClass]="{ 'bg-red-500': menuTab === 'drink', 'bg-gray-300 text-black': menuTab !== 'drink' }"
+            (click)="handleMenuTabs('drink')">
+            Drink
+        </button>
+
+        <button
+            class="text-sm py-3 px-6 rounded-full text-white poppins ring-red-300 focus:ring-4 transition duration-300 transform hover:scale-105"
+            [ngClass]="{ 'bg-red-500': menuTab === 'dessert', 'bg-gray-300 text-black': menuTab !== 'dessert' }"
+            (click)="handleMenuTabs('dessert')">
+            Dessert
+        </button>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-12">
+
+        <ng-container *ngIf="loading; else foodList">
+            <app-skeleton *ngFor="let _ of [1,2,3]"></app-skeleton>
+        </ng-container>
+
+
+        <ng-template #foodList>
+            <app-food-item-edit *ngFor="let food of filteredFoods" [food]="food"></app-food-item-edit>
+        </ng-template>
+    </div>
+
+</section>

@@ -1,5 +1,6 @@
 const MenuItem = require('../models/menuitem');
 const { validationResult } = require('express-validator');
+const { getIO } = require('../config/socket');
 
 // GetAllMenuItems
 exports.getAllMenuItems = async (req, res, next) => {
@@ -20,7 +21,7 @@ exports.createNewMenuItem = async (req, res, next) => {
             return res.status(400).json({ errors: errors.array() });
         }
 
-        const { name, description, price, category, isAvailable,isSignature } = req.body;
+        const { name, description, price, category, isAvailable, isSignature } = req.body;
 
         const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
 
@@ -44,7 +45,7 @@ exports.createNewMenuItem = async (req, res, next) => {
 exports.updateMenuitem = async (req, res, next) => {
     try {
         const menuItemId = req.params.id;
-        const { name, description, price, category, isAvailable,isSignature } = req.body;
+        const { name, description, price, category, isAvailable, isSignature } = req.body;
         const imageFile = req.file;
 
         const menuItem = await MenuItem.findByPk(menuItemId);
@@ -57,14 +58,25 @@ exports.updateMenuitem = async (req, res, next) => {
         menuItem.price = price || menuItem.price;
         menuItem.category = category || menuItem.category;
         menuItem.isAvailable = isAvailable !== undefined ? isAvailable : menuItem.isAvailable;
-        menuItem.isSignatures = isSignature || menuItem.isSignature;
+        menuItem.isSignature = isSignature !== undefined ? isSignature : menuItem.isSignature;  
 
         if (imageFile) {
             menuItem.imageUrl = `/uploads/${imageFile.filename}`;
+            menuItem.updatedAt = new Date();
         }
         await menuItem.save();
 
-        res.json({ message: 'Menu item updated successfully', menuItem });
+        // ดึงข้อมูลล่าสุด
+        const updatedMenuItem = await MenuItem.findByPk(menuItemId);
+        updatedMenuItem.dataValues.updatedAt = new Date(updatedMenuItem.updatedAt).getTime();
+
+        console.log('Updated menu item updatedAt timestamp:', updatedMenuItem.dataValues.updatedAt);
+
+        const io = getIO();
+        io.emit('menuUpdated', updatedMenuItem);
+
+        // ส่งข้อมูลอัปเดตล่าสุดกลับ
+        res.json({ message: 'Menu item updated successfully', menuItem: updatedMenuItem });
 
     } catch (err) {
         res.status(500).json({ error: err.message });

@@ -42,6 +42,13 @@ app.use(cors({
 app.use(express.json()); //JSON body
 app.use(express.urlencoded({ extended: true })); // สำหรับแปลง form-data / x-www-form-urlencoded
 
+// Close cache Picture Backend
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
+  setHeaders: (res, path) => {
+    res.setHeader('Cache-Control', 'no-store');
+  }
+}));
+
 // Middlewares
 app.use('/tables', tableRoutes);
 app.use('/menu-items', menuItemRoutes);
