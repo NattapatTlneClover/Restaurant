@@ -18,7 +18,7 @@ export class TablesComponent implements OnInit {
 
   menuTab: 'NotReserved' | 'Reserved' = 'NotReserved';
 
-  // สำหรับ Add Table modal
+  // Add Table modal
   showAddTableModal = false;
   newTableNumber = '';
   newChairQuantity: number = 0;
@@ -85,16 +85,24 @@ export class TablesComponent implements OnInit {
   addTable() {
     const tableData: Partial<TableItem> = {
       numberTable: this.newTableNumber,
-      chairQuantity: this.newChairQuantity
+      chairQuantity: this.newChairQuantity,
     };
 
     this.tableService.createTable(tableData, this.selectedTableFile).subscribe({
       next: (res) => {
         console.log('Table created:', res);
         this.closeAddTableModal();
-        this.loadTables(); // โหลดตารางใหม่หลังสร้าง
+        this.loadTables();
       },
-      error: (err) => console.error('Error creating table', err)
+      error: (err) => console.error('Error creating table', err),
     });
+  }
+
+  removeTableFromList(id: number) {
+    this.Tables = this.Tables.filter((t) => t.id !== id);
+  }
+
+  openEditTableModal(id: number) {
+    console.log('Open edit modal for table id:', id);
   }
 }

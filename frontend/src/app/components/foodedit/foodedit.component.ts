@@ -128,4 +128,7 @@ export class FoodeditComponent implements OnInit, OnDestroy {
       },
     });
   }
+  handleDeleteMenu(id: number) {
+    this.foods = this.foods.filter((f) => f.id !== id);
+  }
 }

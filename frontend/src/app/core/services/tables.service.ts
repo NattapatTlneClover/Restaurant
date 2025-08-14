@@ -58,4 +58,8 @@ export class TableService {
 
     return this.http.post<TableItem>(this.apiUrl, formData);
   }
+
+  deleteTable(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
 }

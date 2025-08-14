@@ -56,4 +56,8 @@ export class FoodService {
 
   return this.http.post(this.apiUrl, formData);
 }
+
+deleteMenu(id: number): Observable<any> {
+  return this.http.delete(`${this.apiUrl}/${id}`);
+}
 }

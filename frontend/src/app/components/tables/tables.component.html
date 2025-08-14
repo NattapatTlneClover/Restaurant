@@ -28,8 +28,13 @@
 
 
         <ng-template #tableList>
-            <app-table-item *ngFor="let table of filteredTables" [table]="table" (onReserve)="reserve($event)"
-                (onCancel)="cancelReserve($event)"></app-table-item>
+            <app-table-item 
+            *ngFor="let table of filteredTables" 
+            [table]="table" (onReserve)="reserve($event)"
+            (onCancel)="cancelReserve($event)" 
+            (onDelete)="removeTableFromList($event)"
+            (onEdit)="openEditTableModal($event)">
+        </app-table-item>
         </ng-template>
     </div>
 

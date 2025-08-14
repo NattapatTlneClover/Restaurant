@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { FoodService, FoodItem } from '../../core/services/foods.service';
 import { SocketService } from '../../core/services/socket.service';
@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
 })
 export class FoodItemEditComponent {
   @Input() food!: FoodItem;
+  @Output() onDelete = new EventEmitter<number>();
   isOpen = false;
   selectedFile?: File;
 
@@ -81,5 +82,18 @@ export class FoodItemEditComponent {
   }
   onLoaded(event: any) {
     console.log('loaded', event.target.src);
+  }
+
+  onDeleteMenu(id: number) {
+    if (confirm('Are you sure you want to delete this menu?')) {
+      this.foodService.deleteMenu(id).subscribe({
+        next: () => {
+          console.log('Menu deleted:', id);
+
+           this.onDelete.emit(this.food.id);
+        },
+        error: (err) => console.error('Error deleting menu', err),
+      });
+    }
   }
 }

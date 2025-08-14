@@ -37,7 +37,11 @@
 
 
         <ng-template #foodList>
-            <app-food-item-edit *ngFor="let food of filteredFoods" [food]="food"></app-food-item-edit>
+            <app-food-item-edit 
+            *ngFor="let food of filteredFoods" 
+            [food]="food" 
+            (onDelete)="handleDeleteMenu($event)">
+        </app-food-item-edit>
         </ng-template>
     </div>
 
