@@ -14,6 +14,10 @@
             (click)="handleMenuTabs('Reserved')">
             Reserved
         </button>
+
+        <button class="text-sm py-3 px-6 rounded-full bg-black text-white poppins" (click)="openAddTableModal()">
+            + Add Table
+        </button>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-12">
@@ -30,3 +34,22 @@
     </div>
 
 </section>
+
+<div *ngIf="showAddTableModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-6 w-full max-w-md shadow-lg">
+        <h2 class="text-lg font-semibold mb-4">Add New Table</h2>
+
+        <input type="text" placeholder="Table Number" [(ngModel)]="newTableNumber"
+            class="border border-gray-300 rounded p-2 w-full mb-3" />
+
+        <input type="number" placeholder="Chair Quantity" [(ngModel)]="newChairQuantity"
+            class="border border-gray-300 rounded p-2 w-full mb-3" />
+
+        <input type="file" (change)="onTableFileSelected($event)" class="mb-3" />
+
+        <div class="flex justify-end space-x-2">
+            <button class="px-4 py-2 rounded bg-gray-300" (click)="closeAddTableModal()">Cancel</button>
+            <button class="px-4 py-2 rounded bg-black text-white" (click)="addTable()">Save</button>
+        </div>
+    </div>
+</div>

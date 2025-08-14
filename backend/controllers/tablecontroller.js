@@ -1,4 +1,5 @@
 const Table = require('../models/table');
+const OrderGroup = require('../models/order_group');
 
 function generateCredentialCode(length = 8) {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -77,6 +78,13 @@ exports.unreserveTable = async (req, res) => {
         table.credentialCode = null;
         table.reservedAt = null;
         await table.save();
+
+        const orderGroups = await OrderGroup.findAll({ where: { table_id: table.id } });
+
+        for (const orderGroup of orderGroups) {
+            orderGroup.status = 'closed';
+            await orderGroup.save();
+        }
 
         res.json({ message: 'Reservation cancelled', table });
     } catch (err) {

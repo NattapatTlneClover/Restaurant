@@ -1,4 +1,3 @@
-// app.routes.ts
 import { Routes } from '@angular/router';
 import { UserLoginComponent } from './login/user-login/user-login.component';
 import { AdminLoginComponent } from './login/admin-login/admin-login.component';
@@ -27,5 +26,5 @@ export const routes: Routes = [
   { path: 'checkout', component: CheckoutComponent },
   { path: 'amplihier', component: OrderStatusComponent },
   { path: '', redirectTo: '/login-user', pathMatch: 'full' },
-  { path: '**', redirectTo: '/login-user' }, 
+  { path: '**', redirectTo: '/login-user' },
 ];

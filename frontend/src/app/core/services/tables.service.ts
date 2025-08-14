@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 export interface TableItem {
   id: number;
   numberTable: string;
-  chairQuantity: string;
+  chairQuantity: number;
   isReserved: boolean;
   imageUrl: string;
   credentialCode: string | null;
@@ -45,5 +45,17 @@ export class TableService {
         credentialCode: credentialCode,
       }
     );
+  }
+
+  createTable(table: Partial<TableItem>, file?: File): Observable<TableItem> {
+    const formData = new FormData();
+    formData.append('numberTable', table.numberTable!);
+    formData.append('chairQuantity', table.chairQuantity!.toString());
+
+    if (file) {
+      formData.append('image', file, file.name);
+    }
+
+    return this.http.post<TableItem>(this.apiUrl, formData);
   }
 }
