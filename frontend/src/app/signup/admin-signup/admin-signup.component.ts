@@ -9,6 +9,7 @@ import {
 } from '@angular/forms';
 
 import { AuthService } from '../../core/services/auth.service';
+import { Router } from '@angular/router';
 
 function equalValues(controlName1: string, controlName2: string) {
   return (control: AbstractControl) => {
@@ -31,7 +32,7 @@ function equalValues(controlName1: string, controlName2: string) {
   styleUrl: './admin-signup.component.css',
 })
 export class AdminSignupComponent {
-  constructor(private authservice: AuthService) {}
+  constructor(private authservice: AuthService, private router: Router) {}
 
   form = new FormGroup({
     username: new FormControl('', { validators: [Validators.required] }),
@@ -58,29 +59,30 @@ export class AdminSignupComponent {
   });
 
   onSubmit() {
-   if (this.form.invalid) {
-    console.log('INVALID FORM');
-    return;
-  }
+    if (this.form.invalid) {
+      console.log('INVALID FORM');
+      return;
+    }
 
-  const fullName = this.form.value.firstName + ' ' + this.form.value.lastName;
+    const fullName = this.form.value.firstName + ' ' + this.form.value.lastName;
 
-  const payload = {
-    username: this.form.value.username,
-    password: this.form.value.passwords?.password,  
-    full_name: fullName.trim(),
-    role: this.form.value.role,
-  };
+    const payload = {
+      username: this.form.value.username,
+      password: this.form.value.passwords?.password,
+      full_name: fullName.trim(),
+      role: this.form.value.role,
+    };
 
-  this.authservice.register(payload).subscribe({
-    next: (res) => {
-      console.log('Register success', res);
-    },
-    error: (err) => {
-      console.log(payload)
-      console.error('Register failed', err);
-    },
-  });
+    this.authservice.register(payload).subscribe({
+      next: (res) => {
+        console.log('Register success', res);
+        this.router.navigate(['/login-admin']);
+      },
+      error: (err) => {
+        console.log(payload);
+        console.error('Register failed', err);
+      },
+    });
   }
 
   onReset() {
